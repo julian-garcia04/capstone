@@ -91,10 +91,18 @@ def create_athlete(payload: schemas.AthleteCreate, db: Session = Depends(get_db)
 
     test = models.AthleteTest(
         athlete_id=athlete.id,
+        test_date=payload.test_date or date.today(),
+        # Sprint tests
+        sprint_40yd=payload.sprint_40yd,
         sprint_30m=payload.sprint_30m,
+        flying_sprint=payload.flying_sprint,
+        accel_10m=payload.accel_10m,
+        split_5m=payload.split_5m,
+        split_10m=payload.split_10m,
+        split_20m=payload.split_20m,
+        # Other tests
         agility_t=payload.agility_t,
         beep_level=payload.beep_level,
-        test_date=payload.test_date or date.today()
     )
     db.add(test)
     db.commit()
@@ -144,8 +152,12 @@ def get_fit_result(athlete_id: int, db: Session = Depends(get_db)):
         .all()
     )
 
-    METRICS = ["sprint_30m", "agility_t", "beep_level"]
-    HIGHER_IS_BETTER = {"beep_level"}
+    METRICS = [
+        "sprint_40yd", "sprint_30m", "flying_sprint",
+        "accel_10m", "split_5m", "split_10m", "split_20m",
+        "agility_t", "beep_level"
+    ]
+    HIGHER_IS_BETTER = {"beep_level"}  # all others are lower = better
 
     division_results: dict = {}
     recommended_division = None

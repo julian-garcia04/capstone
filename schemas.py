@@ -70,12 +70,22 @@ class UserResponse(BaseModel):
 
 # ── Athlete schemas ───────────────────────────────────────────
 class TestResult(BaseModel):
-    """One row of performance data for a player."""
+    # One row of performance test data for a player — returned when viewing profile history.
     id: int
     test_date: Optional[date]
-    sprint_30m: Optional[float]   # seconds 
-    agility_t:  Optional[float]   # seconds 
-    beep_level: Optional[float]   # level reached 
+
+    # Sprint tests (seconds — lower is faster)
+    sprint_40yd:   Optional[float]  # 40-yard dash
+    sprint_30m:    Optional[float]  # 30-meter sprint
+    flying_sprint: Optional[float]  # flying sprint
+    accel_10m:     Optional[float]  # 10-meter acceleration
+    split_5m:      Optional[float]  # 5m split of 5/10/20 test
+    split_10m:     Optional[float]  # 10m split of 5/10/20 test
+    split_20m:     Optional[float]  # 20m split of 5/10/20 test
+
+    # Other tests
+    agility_t:  Optional[float]  # T-test (seconds — lower is better)
+    beep_level: Optional[float]  # beep test level reached (higher is better)
 
     class Config:
         from_attributes = True
@@ -89,9 +99,18 @@ class AthleteCreate(BaseModel):
     height_in: float = Field(gt=47, lt=91)   # ~4'0" to 7'7"
     weight_lb: float = Field(gt=77, lt=352)  # reasonable athletic range
 
-    sprint_30m: Optional[float] = Field(None, gt=3.0, lt=7.0)
+    # Sprint tests (seconds — all optional at entry time)
+    sprint_40yd:   Optional[float] = Field(None, gt=3.0,  lt=8.0)
+    sprint_30m:    Optional[float] = Field(None, gt=3.0,  lt=7.0)
+    flying_sprint: Optional[float] = Field(None, gt=1.5,  lt=5.0)
+    accel_10m:     Optional[float] = Field(None, gt=1.0,  lt=3.5)
+    split_5m:      Optional[float] = Field(None, gt=0.5,  lt=2.5)
+    split_10m:     Optional[float] = Field(None, gt=1.0,  lt=3.5)
+    split_20m:     Optional[float] = Field(None, gt=2.5,  lt=6.0)
+
+    # Other tests
     agility_t:  Optional[float] = Field(None, gt=7.0, lt=13.0)
-    beep_level: Optional[float] = Field(None, ge=1, le=20)
+    beep_level: Optional[float] = Field(None, ge=1,   le=20)
 
     test_date: Optional[date] = None
 
@@ -112,10 +131,20 @@ class AthleteResponse(BaseModel):
 # ── Division benchmark schemas ────────────────────────────────
 
 class BenchmarkResponse(BaseModel):
-    """One division's benchmark thresholds — mirrors DivisionBenchmark model."""
+    # One division's benchmark thresholds — mirrors DivisionBenchmark model exactly.
     division: str
     position: Optional[str]
-    sprint_30m: Optional[float]
+
+    # Sprint thresholds (seconds — max allowed to qualify, lower = faster)
+    sprint_40yd:   Optional[float]
+    sprint_30m:    Optional[float]
+    flying_sprint: Optional[float]
+    accel_10m:     Optional[float]
+    split_5m:      Optional[float]
+    split_10m:     Optional[float]
+    split_20m:     Optional[float]
+
+    # Other thresholds
     agility_t:  Optional[float]
     beep_level: Optional[float]
 

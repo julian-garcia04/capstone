@@ -24,17 +24,6 @@ class User(Base):
 
     athlete_profile = relationship("Athlete", back_populates="owner", uselist=False)
 
-    # ------------------------------------------------------------------
-    # COACH FEATURES (not yet supported — uncomment when coach view is built)
-    # ------------------------------------------------------------------
-    # role = Column(String, nullable=False, default="player")
-    #   ^ what type of account this is: "player" or "coach"
-    #
-    # submitted_athletes = relationship("Athlete", back_populates="submitted_by_user",
-    #                                   foreign_keys="Athlete.submitted_by")
-    #   ^ list of athlete profiles a coach has submitted
-    # ------------------------------------------------------------------
-
 
 class Athlete(Base):
     # Stores a player's personal info and physical measurements.
@@ -62,22 +51,12 @@ class Athlete(Base):
         order_by="AthleteTest.test_date"
     )
 
-    # ------------------------------------------------------------------
-    # COACH FEATURES (not yet supported — uncomment when coach view is built)
-    # ------------------------------------------------------------------
-    # submitted_by = Column(Integer, ForeignKey("users.id"), nullable=True)
-    #   ^ stores the user.id of the coach who entered this athlete's profile
-    #
-    # submitted_by_user = relationship("User", back_populates="submitted_athletes",
-    #                                  foreign_keys=[submitted_by])
-    #   ^ lets you do athlete.submitted_by_user to get the coach object
-    # ------------------------------------------------------------------
-
-
 class AthleteTest(Base):
     # Stores one set of performance test results for an athlete — one athlete can have many rows.
     # Fields:
-    #     id, athlete_id, test_date, sprint_30m, agility_t, beep_level
+    #     id, athlete_id, test_date,
+    #     sprint_40yd, sprint_30m, flying_sprint, accel_10m, split_5m, split_10m, split_20m,
+    #     agility_t, beep_level
     # Relationships:
     #     athlete: links back to the Athlete this test belongs to
     # NOTE: metric column names must match DivisionBenchmark exactly — the fit engine compares them by name
@@ -87,9 +66,18 @@ class AthleteTest(Base):
     athlete_id = Column(Integer, ForeignKey("athletes.id"), nullable=False)  # which athlete this belongs to
     test_date  = Column(Date, nullable=True)                                  # date the test was performed
 
-    sprint_30m = Column(Float, nullable=True)  # 30-meter sprint time in seconds  (lower = faster)
-    agility_t  = Column(Float, nullable=True)  # T-test agility time in seconds   (lower = better)
-    beep_level = Column(Float, nullable=True)  # beep test level reached           (higher = better)
+    # Sprint tests — all in seconds, lower is faster (from scraper)
+    sprint_40yd  = Column(Float, nullable=True)  # 40-yard dash
+    sprint_30m   = Column(Float, nullable=True)  # 30-meter sprint
+    flying_sprint = Column(Float, nullable=True) # flying sprint
+    accel_10m    = Column(Float, nullable=True)  # 10-meter acceleration test
+    split_5m     = Column(Float, nullable=True)  # 5m leg of the 5/10/20-meter sprint
+    split_10m    = Column(Float, nullable=True)  # 10m leg of the 5/10/20-meter sprint
+    split_20m    = Column(Float, nullable=True)  # 20m leg of the 5/10/20-meter sprint
+
+    # Other fitness tests
+    agility_t  = Column(Float, nullable=True)  # T-test agility time in seconds (lower = better)
+    beep_level = Column(Float, nullable=True)  # beep test level reached (higher = better)
 
     athlete = relationship("Athlete", back_populates="tests")
 
@@ -97,7 +85,9 @@ class AthleteTest(Base):
 class DivisionBenchmark(Base):
     # Stores Kevin's scraped benchmark thresholds for each division and position combination.
     # Fields:
-    #     id, division, position, sprint_30m, agility_t, beep_level, updated_at
+    #     id, division, position,
+    #     sprint_40yd, sprint_30m, flying_sprint, accel_10m, split_5m, split_10m, split_20m,
+    #     agility_t, beep_level, updated_at
     # Relationships:
     #     none — this table is read-only reference data used by the fit engine
     __tablename__ = "division_benchmarks"
@@ -106,9 +96,18 @@ class DivisionBenchmark(Base):
     division = Column(String, nullable=False)  # "D1", "D2", "D3", "NAIA", or "JUCO"
     position = Column(String, nullable=True)   # "GK", "CB", "ST" etc — NULL means applies to all positions
 
-    sprint_30m = Column(Float, nullable=True)  # max allowed time to meet this division (lower = faster)
-    agility_t  = Column(Float, nullable=True)  # max allowed time to meet this division
-    beep_level = Column(Float, nullable=True)  # minimum level required to meet this division
+    # Sprint benchmarks — max allowed time per division (from scraper), lower = faster
+    sprint_40yd   = Column(Float, nullable=True)  # 40-yard dash threshold
+    sprint_30m    = Column(Float, nullable=True)  # 30-meter sprint threshold
+    flying_sprint = Column(Float, nullable=True)  # flying sprint threshold
+    accel_10m     = Column(Float, nullable=True)  # 10-meter acceleration threshold
+    split_5m      = Column(Float, nullable=True)  # 5m split of 5/10/20 threshold
+    split_10m     = Column(Float, nullable=True)  # 10m split of 5/10/20 threshold
+    split_20m     = Column(Float, nullable=True)  # 20m split of 5/10/20 threshold
+
+    # Other benchmarks
+    agility_t  = Column(Float, nullable=True)  # T-test max time threshold
+    beep_level = Column(Float, nullable=True)  # beep test minimum level required
 
     updated_at = Column(DateTime(timezone=True), server_default=func.now())  # when this data was last updated
 
