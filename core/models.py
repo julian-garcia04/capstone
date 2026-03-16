@@ -4,7 +4,6 @@ from django.contrib.auth.models import User  # Import Django's built-in User mod
 
 # ── 1. User Model ────────────────────────────────────────────────
 # We are using Django's built-in User model for authentication.
-# We no longer need a custom User or UserManager.
 
 
 # ── 2. Athlete Profile ──────────────────────────────────────────
