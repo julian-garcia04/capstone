@@ -2,12 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User  # Import Django's built-in User model
 
 
-# ── We no longer need a custom User or UserManager ────────────────
+# ── 1. User Model ────────────────────────────────────────────────
+# We are using Django's built-in User model for authentication.
+# We no longer need a custom User or UserManager.
 
 
-# ── 2. Athlete Setup ──────────────────────────────────────────
-# Links to Django's built-in User model now.
+# ── 2. Athlete Profile ──────────────────────────────────────────
+# Extends Django's User model with athlete-specific data.
 class Athlete(models.Model):
+    # Links to Django's User model.  One user <-> one athlete profile.
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='athlete_profile')
     grad_year = models.IntegerField(null=True, blank=True)
     height_in = models.FloatField(null=True, blank=True)
@@ -17,13 +20,15 @@ class Athlete(models.Model):
         return f"Athlete: {self.user.username}"
 
 
-# ── 3. Test Results Setup ─────────────────────────────────────
-# We keep this separate from Athlete so a user can track their progress over time
+# ── 3. Athlete Test Results ─────────────────────────────────────
+# Stores individual test results for an athlete.
+# Allows tracking progress over time.
 class AthleteTest(models.Model):
+    # Links to the Athlete model. One athlete <-> many test results.
     athlete = models.ForeignKey(Athlete, on_delete=models.CASCADE, related_name='tests')
-    test_date = models.DateField(auto_now_add=True)
+    test_date = models.DateField(auto_now_add=True)  # Automatically set on creation
 
-    # ... (all your test fields remain the same)
+    # Test fields (all optional)
     sprint_40yd = models.FloatField(null=True, blank=True)
     sprint_30m = models.FloatField(null=True, blank=True)
     flying_sprint = models.FloatField(null=True, blank=True)
@@ -48,10 +53,11 @@ class AthleteTest(models.Model):
     box_jump = models.FloatField(null=True, blank=True)
 
     class Meta:
-        ordering = ['-test_date']
+        ordering = ['-test_date']  # Most recent test first
 
 
-# ── 4. Benchmarks Setup ───────────────────────────────────────
+# ── 4. Division Benchmarks ──────────────────────────────────────
+# Stores benchmark data for different divisions and tests.
 class DivisionBenchmark(models.Model):
     division = models.CharField(max_length=50)
     category = models.CharField(max_length=100)
@@ -61,7 +67,7 @@ class DivisionBenchmark(models.Model):
     threshold_max = models.FloatField(null=True, blank=True)
 
     class Meta:
-        unique_together = ('division', 'test_name')
+        unique_together = ('division', 'test_name')  # Ensure unique benchmarks
 
     def __str__(self):
         return f"{self.division} - {self.test_name}"
