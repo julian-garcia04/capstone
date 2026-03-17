@@ -1,10 +1,10 @@
-# 🚀 Capstone V2 - Backend Cheat Sheet
+# Capstone V2 - Backend Cheat Sheet
 
 Welcome to the Django backend! This guide explains the core development workflow, the purpose of our key files, and how they all interact.
 
 ---
 
-## ✅ 1. Core Development Workflow
+## 1. Core Development Workflow
 
 These are the most common tasks you'll perform.
 
@@ -46,7 +46,7 @@ The easiest way to test is with the built-in **API Sandbox** (also called the Br
 
 ---
 
-## 🗺️ 2. Project File Map
+## 2. Project File Map
 
 This is a map of the important files in our backend project.
 
@@ -64,7 +64,7 @@ This is a map of the important files in our backend project.
 
 ---
 
-## 🧠 3. The Logic Behind an API Request
+## 3. The Logic Behind an API Request
 
 THIS IS THE MOST IMPORTANT CONCEPT. The timeline of a request from the browser to the database and back.
 
@@ -88,7 +88,7 @@ THIS IS THE MOST IMPORTANT CONCEPT. The timeline of a request from the browser t
 
 ---
 
-## 🛠️ 4. Useful Terminal Commands
+## 4. Useful Terminal Commands
 
 #### Project & Server
 - `python manage.py runserver`: Starts the development server.
