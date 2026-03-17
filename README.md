@@ -4,7 +4,7 @@ This Django-based application provides a RESTful API for tracking and analyzing 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the project up and running on your local machine for development and testing.
 
 ### Prerequisites
 
