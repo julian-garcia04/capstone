@@ -190,7 +190,7 @@ def scrape_soccer_benchmarks():
                 
                 current_node = current_node.find_next()
 
-    # Pass the data through our new post-processor to fill in the missing range values
+    # Pass the data through the post-processor to fill in the missing range values
     organized_data = post_process_benchmarks(organized_data)
 
     return organized_data
