@@ -13,22 +13,22 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Setup & Installation
 
-1.  **Clone the repository:**
+1.  **Clone the `capstone_v2` branch:**
     ```bash
-    git clone <repository-url>
+    git clone -b capstone_v2 https://github.com/julian-garcia04/capstone_v2.git
     cd capstone_v2
     ```
 
 2.  **Create and activate a virtual environment:**
     *   On Windows:
         ```bash
-        python -m venv venv
-        .\\venv\\Scripts\\activate
+        python -m venv .venv
+        .\.venv\Scripts\activate
         ```
     *   On macOS/Linux:
         ```bash
-        python3 -m venv venv
-        source venv/bin/activate
+        python3 -m venv .venv
+        source .venv/bin/activate
         ```
 
 3.  **Install the required packages:**
@@ -37,7 +37,7 @@ These instructions will get you a copy of the project up and running on your loc
     ```
 
 4.  **Run the database migrations:**
-    This will create the `db.sqlite3` file and set up the necessary database tables.
+    This will create the `db.sqlite3` file and set up the necessary database tables, including the initial benchmark data.
     ```bash
     python manage.py migrate
     ```
