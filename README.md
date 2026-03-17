@@ -15,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
+    git clone <repository-url>
     cd capstone_v2
     ```
 
