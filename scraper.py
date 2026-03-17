@@ -4,7 +4,7 @@ import json
 import re
 import os
 
-# --- Helper Functions (These remain the same) ---
+# Scraper data flow: scrape_soccer_benchmarks -> parse_benchmark_value -> post_process_benchmarks
 
 def clean_text(text):
     if not text:
@@ -170,7 +170,8 @@ def scrape_soccer_benchmarks():
 
                                 if division and raw_value != "N/A":
                                     min_val, max_val = parse_benchmark_value(raw_value, matched_category, test_name)
-                                    
+
+                                    # rather than gathering results in feet, we gather the result in meters (cooper test lists both in raw_value)
                                     if 'cooper' in test_name.lower():
                                         if 'feet' in raw_value.lower() or 'ft' in raw_value.lower():
                                             if min_val: min_val = round(min_val * 0.3048, 1)
@@ -197,7 +198,7 @@ def scrape_soccer_benchmarks():
 
     return organized_data
 
-# --- NEW Main Execution Block ---
+# sends scraped data to the database using the API endpoint
 
 if __name__ == "__main__":
     print("Starting Web Scraper...")
@@ -205,8 +206,7 @@ if __name__ == "__main__":
     
     if benchmarks:
         print(f"✅ Successfully scraped {len(benchmarks)} benchmarks.")
-        
-        # The URL for your local benchmark API endpoint
+
         api_url = "http://127.0.0.1:8000/api/benchmarks/"
         
         success_count = 0

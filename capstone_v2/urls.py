@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    # We are not using the admin panel in this project
+    # We are not using the admin panel
     # path('admin/', admin.site.urls), 
 
     # Include all the URLs from our 'core' app, prefixed with 'api/'
