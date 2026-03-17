@@ -116,6 +116,11 @@ class FitResultView(APIView):
             "username": request.user.username, "test_date": latest_test.test_date, "results": results
         })
 
+# For when we get to stretch development. This is needed to evaluate multiple test result entries from the athlete.
+# As of now, the database will only save test results entered in by the user, not the results from the fit engine.
+# Thinking we use pass/fail % for each division. e.g. readiness_score_d1 = 62.6%, readiness_score_d2 = 82.4%
+
+# class BenchmarkHistoryView(APIView):
 
 # ── 4. Benchmarks ───────────────────────────────────────────────
 class BenchmarkView(APIView):
