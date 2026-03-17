@@ -4,6 +4,8 @@ import json
 import re
 import os
 
+# --- Helper Functions (These remain the same) ---
+
 def clean_text(text):
     if not text:
         return ""
@@ -195,18 +197,51 @@ def scrape_soccer_benchmarks():
 
     return organized_data
 
+# --- NEW Main Execution Block ---
+
 if __name__ == "__main__":
     print("Starting Web Scraper...")
-    data = scrape_soccer_benchmarks()
-    print(data)
-    if data:
-        output_file = "scraped_benchmarks.json"
-        with open(output_file, "w") as f:
-            json.dump(data, f, indent=4)
+    benchmarks = scrape_soccer_benchmarks()
+    
+    if benchmarks:
+        print(f"✅ Successfully scraped {len(benchmarks)} benchmarks.")
+        
+        # The URL for your local benchmark API endpoint
+        api_url = "http://127.0.0.1:8000/api/benchmarks/"
+        
+        success_count = 0
+        fail_count = 0
+        
+        print(f"\nPosting data to {api_url}...")
+        
+        for benchmark in benchmarks:
+            try:
+                # Send a POST request to the API for each benchmark
+                # The .post() method automatically converts the dict to JSON
+                response = requests.post(api_url, json=benchmark)
+                
+                # Check if the request was successful (200 OK or 201 Created)
+                if response.status_code in [200, 201]:
+                    print(f"  -> Successfully posted: {benchmark['division']} - {benchmark['test_name']}")
+                    success_count += 1
+                else:
+                    # Print an error if the API returned a problem
+                    print(f"  -> ❌ FAILED to post: {benchmark['division']} - {benchmark['test_name']}")
+                    print(f"     Status: {response.status_code}, Response: {response.text}")
+                    fail_count += 1
+            except requests.RequestException as e:
+                print(f"  -> ❌ NETWORK ERROR posting: {benchmark['division']} - {benchmark['test_name']}")
+                print(f"     Error: {e}")
+                fail_count += 1
+
+        print("\n--- Scraping and Posting Complete ---")
+        print(f"✅ Successful posts: {success_count}")
+        print(f"❌ Failed posts: {fail_count}")
+        
+        if fail_count == 0:
+            print("\nAll benchmarks posted successfully!")
+        else:
+            print("\nSome benchmarks failed to post. Check the errors above.")
             
-        print(f"✅ Successfully scraped, parsed, and inferred ranges for {len(data)} benchmarks.")
-        print(f"✅ Data saved to {output_file}.")
-        print("\nTo load this data into the Django database, run:")
-        print("python manage.py load_benchmarks")
     else:
         print("❌ Scraper failed to return any data.")
