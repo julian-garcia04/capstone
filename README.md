@@ -109,4 +109,12 @@ To access protected endpoints, you need to log in and get a session cookie.
 ### Available Test Fields
 
 You can include any of the following fields when posting a new test:
-`sprint_40yd`, `sprint_30m`, `flying_sprint`, `accel_10m`, `split_5m`, `split_10m`, `split_20m`, `agility_t`, `shuttle_run`, `lateral_agility`, `illinois_agility`, `beep_level`, `cooper_test`, `interval_run`, `vertical_jump`, `broad_jump`, `medicine_ball_throw`, `push_ups`, `sit_ups`, `plank`, `lunges`, `box_jump`.
+
+```
+sprint_40yd, sprint_30m, flying_sprint, accel_10m,
+split_5m, split_10m, split_20m, agility_t,
+shuttle_run, lateral_agility, illinois_agility,
+beep_level, cooper_test, interval_run, vertical_jump,
+broad_jump, medicine_ball_throw, push_ups, sit_ups,
+plank, lunges, box_jump
+```
