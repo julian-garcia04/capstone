@@ -182,6 +182,10 @@ def scrape_soccer_benchmarks():
                                     if division == "Division 1" and matched_category == "Physical Strength and Endurance Circuit":
                                         max_val = None
                                     
+                                    # NEW RULE: For Division 1 in Explosiveness, there should be no max threshold
+                                    if division == "Division 1" and matched_category == "Explosiveness and Power":
+                                        max_val = None
+
                                     organized_data.append({
                                         "division": division,
                                         "category": matched_category,

@@ -1,6 +1,6 @@
 # Capstone V2 - Backend Cheat Sheet
 
-Welcome to the Django backend! This guide explains the core development workflow, the purpose of our key files, and how they all interact.
+This guide explains the core development workflow, the purpose of our key files, and how they all interact.
 
 ---
 
