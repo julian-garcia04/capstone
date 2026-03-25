@@ -20,18 +20,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third-party apps
     'rest_framework',
-    'corsheaders',
-
-    # Your apps
     'core',
 ]
 
@@ -133,5 +129,10 @@ REST_FRAMEWORK = {
 
 
 # ── CORS Settings for React ───────────────────────────────────
-CORS_ALLOW_ALL_ORIGINS = True # For development only
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",    # The default React dev server
+    "http://127.0.0.1:3000",   # Also for React
+]
+
+CORS_ALLOW_ALL_ORIGINS = True # For development only / change after we initially connect frontend to backend
 CORS_ALLOW_CREDENTIALS = True
