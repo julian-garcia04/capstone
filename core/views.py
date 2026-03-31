@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
 from .models import Athlete, DivisionBenchmark
 from .serializers import (
-    UserCreateSerializer, AthleteSerializer, 
+    UserCreateSerializer, AthleteSerializer,
     BenchmarkSerializer, AthleteTestSerializer
 )
-
+from .evaluator import FitEvaluationEngine
 # ── 1. Auth ───────────────────────────────────────────────────
 
 class RegisterView(generics.CreateAPIView):
@@ -68,52 +68,31 @@ class AddTestResultView(generics.CreateAPIView):
 
 
 # ── 3. Fit Engine ─────────────────────────────────────────────
-
 class FitResultView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        # 1. Get the athlete and their MOST RECENT test (Newest first)
         athlete = get_object_or_404(Athlete, user=request.user)
-        latest_test = athlete.tests.first()
-        
+
+        # Add order_by to ensure the newest entry is at the top of the list
+        latest_test = athlete.tests.order_by('-test_date', '-id').first()
+
         if not latest_test:
             return Response({"detail": "No test data found. Please add a test first."}, status=400)
 
-        benchmarks = DivisionBenchmark.objects.all()
-        
-        TEST_MAPPING = {
-            "40-Yard Dash": "sprint_40yd", "30-Meter Sprint": "sprint_30m", "Flying Sprints": "flying_sprint",
-            "10-meter acceleration test": "accel_10m", "5m Sprint": "split_5m", "10m Sprint": "split_10m",
-            "20m Sprint": "split_20m", "T-Test": "agility_t", "Shuttle Run": "shuttle_run",
-            "Lateral Agility Test": "lateral_agility", "Illinois Agility Test": "illinois_agility",
-            "Yo-Yo Intermittent Recovery Test (Beep Test)": "beep_level", "Cooper Test": "cooper_test",
-            "Interval Runs": "interval_run", "Vertical Jump": "vertical_jump", "Standing Broad Jump": "broad_jump",
-            "Medicine Ball Throws": "medicine_ball_throw", "Push-ups": "push_ups", "Sit-ups": "sit_ups",
-            "Planks": "plank", "Lunges": "lunges", "Box Jumps": "box_jump"
-        }
+        # 2. Get the Answer Key (Benchmarks)
+        all_benchmarks = DivisionBenchmark.objects.all()
 
-        results = {"Division 1": {}, "Division 2": {}, "Division 3": {}, "NAIA": {}, "JUCO": {}}
-        
-        for division in results.keys():
-            div_benchmarks = benchmarks.filter(division=division)
-            
-            for bm in div_benchmarks:
-                col_name = TEST_MAPPING.get(bm.test_name)
-                if not col_name: continue
-                
-                player_score = getattr(latest_test, col_name, None)
-                if player_score is None: continue
-                
-                meets = False
-                if bm.threshold_max and player_score <= bm.threshold_max: meets = True
-                if bm.threshold_min and player_score >= bm.threshold_min: meets = True
-                
-                results[division][bm.test_name] = {
-                    "player_score": player_score, "target": bm.threshold_max or bm.threshold_min, "pass": meets
-                }
+        # 3. CALL ENGINE
+        engine = FitEvaluationEngine()
+        report = engine.run_evaluation(latest_test, all_benchmarks)
 
+        # 4. Returns division alignment, recs, and strengths/ weaknesses
         return Response({
-            "username": request.user.username, "test_date": latest_test.test_date, "results": results
+            "username": request.user.username,
+            "test_date": latest_test.test_date,
+            **report
         })
 
 # For when we get to stretch development. This is needed to evaluate multiple test result entries from the athlete.
