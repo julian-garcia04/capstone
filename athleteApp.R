@@ -1,12 +1,3 @@
-# ============================================================
-#  Athlete Recruitment Profile App
-#  install.packages(c("shiny","jsonlite","plotly","dplyr","tidyr"))
-#
-#  DATA PATHS — update these two lines for your environment:
-#    BENCHMARK_PATH : Django fixture JSON (initial_benchmarks.json)
-#    ATHLETE_PATH   : Athlete JSON exported from your Django API/fixture
-#                     Leave as NULL to use the built-in seed data.
-# ============================================================
 
 library(shiny)
 library(jsonlite)
@@ -91,35 +82,7 @@ get_cutoff <- function(bm_df, fld, div) {
   if (length(val) == 0) return(NA_real_) else val[1]
 }
 
-# ── 3. Load athlete data ───────────────────────────────────────────────────────
-# When ATHLETE_PATH is set, athletes and their test history are parsed from that
-# JSON.  The expected format is a Django fixture for your Athlete / AthleteTest
-# models (same structure as initial_benchmarks.json but for core.athlete and
-# core.athletetest).
-#
-# Expected athlete JSON structure:
-# [
-#   { "model": "core.athlete",
-#     "pk": 1,
-#     "fields": { "user": 1, "grad_year": 2025, "height_in": 74, "weight_lb": 195 }
-#   },
-#   { "model": "auth.user",
-#     "pk": 1,
-#     "fields": { "username": "john_doe" }
-#   },
-#   { "model": "core.athletetest",
-#     "pk": 1,
-#     "fields": {
-#       "athlete": 1,
-#       "test_date": "2025-01-01",
-#       "sprint_40yd": 4.50,
-#       "vertical_jump": 34.0,
-#       "agility_t": 8.5,
-#       "beep_level": 21.0
-#     }
-#   }
-# ]
-#
+
 # If ATHLETE_PATH is NULL the seed data from seed_athletes.py is used instead.
 
 load_athletes <- function(path) {
