@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User # Import Django's built-in User
+from django.contrib.auth.models import User # Import Django's built in User
 from .models import Athlete, AthleteTest, DivisionBenchmark
 
 # ── 1. User Registration ──────────────────────────────────────
@@ -10,7 +10,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # The default User model requires a username and password.
-        # We don't need confirm_password here as the validation is simple.
+        # We don't need confirm_password
         fields = ['username', 'password']
 
     def create(self, validated_data):

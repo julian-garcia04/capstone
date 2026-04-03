@@ -48,10 +48,10 @@ def create_sample_players():
             "username": "hybrid_player",
             "profile": {"grad_year": 2027, "height_in": 73, "weight_lb": 185},
             "test_scores": {
-                "sprint_40yd": 4.55,        # D1 level speed
-                "vertical_jump": 25.0,      # D3 level power
-                "agility_t": 8.7,           # D1/D2 level agility
-                "beep_level": 16.0          # D3 level endurance
+                "sprint_40yd": 4.55,        # D1 speed
+                "vertical_jump": 25.0,      # D3 power
+                "agility_t": 8.7,           # D1/D2 agility
+                "beep_level": 16.0          # D3 endurance
             }
         }
     ]
@@ -75,7 +75,7 @@ def create_sample_players():
         athlete.weight_lb = data["profile"]["weight_lb"]
         athlete.save()
 
-        # 3. Create a new Test Result entry for them
+        # 3. Create a new Test Result entry
         test_entry = AthleteTest(athlete=athlete, **data["test_scores"])
         test_entry.save()
         print(f"  -> Added test results for {username}")

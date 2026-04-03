@@ -8,7 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# You can copy the secret key from your old settings.py if you want, or use this new one.
 SECRET_KEY = 'django-insecure-your-new-secret-key-here'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -128,10 +127,12 @@ REST_FRAMEWORK = {
 }
 
 
-# ── CORS Settings for React ───────────────────────────────────
+# ── CORS Settings for React and Shiny ───────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",    # The default React dev server
-    "http://127.0.0.1:3000",   # Also for React
+    "http://127.0.0.1:3000",    # For React
+    "http://localhost:3838",    # The default R Shiny dev server
+    "http://127.0.0.1:3838",    # For R Shiny
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True # For development only / change after we initially connect frontend to backend
