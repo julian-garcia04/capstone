@@ -1,3 +1,12 @@
+# ============================================================
+#  Athlete Recruitment Profile App
+#  install.packages(c("shiny","jsonlite","plotly","dplyr","tidyr"))
+#
+#  DATA PATHS — update these two lines for your environment:
+#    BENCHMARK_PATH : Django fixture JSON (initial_benchmarks.json)
+#    ATHLETE_PATH   : Athlete JSON exported from your Django API/fixture
+#                     Leave as NULL to use the built-in seed data.
+# ============================================================
 
 library(shiny)
 library(jsonlite)
@@ -82,7 +91,35 @@ get_cutoff <- function(bm_df, fld, div) {
   if (length(val) == 0) return(NA_real_) else val[1]
 }
 
-
+# ── 3. Load athlete data ───────────────────────────────────────────────────────
+# When ATHLETE_PATH is set, athletes and their test history are parsed from that
+# JSON.  The expected format is a Django fixture for your Athlete / AthleteTest
+# models (same structure as initial_benchmarks.json but for core.athlete and
+# core.athletetest).
+#
+# Expected athlete JSON structure:
+# [
+#   { "model": "core.athlete",
+#     "pk": 1,
+#     "fields": { "user": 1, "grad_year": 2025, "height_in": 74, "weight_lb": 195 }
+#   },
+#   { "model": "auth.user",
+#     "pk": 1,
+#     "fields": { "username": "john_doe" }
+#   },
+#   { "model": "core.athletetest",
+#     "pk": 1,
+#     "fields": {
+#       "athlete": 1,
+#       "test_date": "2025-01-01",
+#       "sprint_40yd": 4.50,
+#       "vertical_jump": 34.0,
+#       "agility_t": 8.5,
+#       "beep_level": 21.0
+#     }
+#   }
+# ]
+#
 # If ATHLETE_PATH is NULL the seed data from seed_athletes.py is used instead.
 
 load_athletes <- function(path) {
@@ -148,30 +185,95 @@ load_athletes <- function(path) {
   list(athletes = athletes_df, history = hist_df)
 }
 
-# ── Seed data (mirrors seed_athletes.py exactly) ─────────────────────────────
+# ── Seed data (mirrors seed_athletes.py exactly — all 14 athletes) ───────────
 seed_athletes <- data.frame(
-  username      = c("d1_player","d2_player","d3_player","hybrid_player"),
-  display_name  = c("D1 Player","D2 Player","D3 Player","Hybrid Player"),
-  grad_year     = c(2025, 2026, 2026, 2027),
-  height_in     = c(74, 71, 69, 73),
-  weight_lb     = c(195, 175, 160, 185),
-  sprint_40yd   = c(4.50, 4.75, 5.00, 4.55),
-  vertical_jump = c(34.0, 29.0, 24.0, 25.0),
-  agility_t     = c(8.5,  9.2, 10.0,  8.7),
-  beep_level    = c(21.0, 18.0, 15.0, 16.0),
-  athlete_pk    = 1:4,
+  username = c(
+    "d1_player", "d2_player", "d3_player", "hybrid_player",
+    "pct_60_player", "pct_80_player", "pct_90_player",
+    "null_all", "null_partial", "zero_scores",
+    "speed_only", "power_only", "almost_d1", "overachiever"
+  ),
+  display_name = c(
+    "D1 Player", "D2 Player", "D3 Player", "Hybrid Player",
+    "60% Player", "80% Player", "90% Player",
+    "No Scores", "Partial Scores", "Zero Scores",
+    "Speed Only", "Power Only", "Almost D1", "Overachiever"
+  ),
+  grad_year = c(
+    2025, 2026, 2026, 2027,
+    2027, 2026, 2025,
+    2028, 2027, 2027,
+    2026, 2025, 2025, 2025
+  ),
+  height_in = c(
+    74, 71, 69, 73,
+    68, 70, 72,
+    71, 73, 69,
+    70, 76, 73, 75
+  ),
+  weight_lb = c(
+    195, 175, 160, 185,
+    155, 168, 180,
+    170, 178, 162,
+    158, 215, 188, 192
+  ),
+  sprint_40yd = c(
+    4.50, 4.75, 5.00, 4.55,    # originals
+    8.33, 6.25, 5.56,           # 60/80/90%
+    NA,   4.90, 4.80,           # null/partial/zero
+    4.40, 6.10, 5.10, 4.20     # variety
+  ),
+  vertical_jump = c(
+    34.0, 29.0, 24.0, 25.0,
+    10.8, 14.4, 16.2,
+    NA,   NA,   0,
+    12.0, 38.0, 17.5, 40.0
+  ),
+  agility_t = c(
+    8.5,  9.2,  10.0,  8.7,
+    15.0, 11.25, 10.0,
+    NA,   9.5,   9.8,
+    11.5, 11.0, 9.15, 7.8
+  ),
+  beep_level = c(
+    21.0, 18.0, 15.0, 16.0,
+    7.8,  10.4, 11.7,
+    NA,   NA,   0,
+    8.0,  9.0,  12.5, 25.0
+  ),
+  athlete_pk = 1:14,
   stringsAsFactors = FALSE
 )
 
-seed_history <- data.frame(
-  username      = rep(c("d1_player","d2_player","d3_player","hybrid_player"), each = 3),
-  athlete_pk    = rep(1:4, each = 3),
-  test_date     = rep(as.Date(c("2024-06-01","2024-09-01","2025-01-01")), times = 4),
-  sprint_40yd   = c(4.65,4.55,4.50, 4.90,4.80,4.75, 5.20,5.10,5.00, 4.70,4.60,4.55),
-  vertical_jump = c(31,  32,  34,   26,  28,  29,   21,  23,  24,   22,  24,  25),
-  agility_t     = c(8.9, 8.7, 8.5,  9.5, 9.3, 9.2, 10.5,10.2,10.0,  9.0, 8.8, 8.7),
-  beep_level    = c(19,  20,  21,   16,  17,  18,   13,  14,  15,   14,  15,  16),
-  stringsAsFactors = FALSE
+# History: only the original 4 have multi-session history.
+# All other athletes default to a single session on 2025-01-01.
+seed_history <- rbind(
+  # Original 4 — 3 sessions each
+  data.frame(
+    username      = rep(c("d1_player","d2_player","d3_player","hybrid_player"), each = 3),
+    athlete_pk    = rep(1:4, each = 3),
+    test_date     = rep(as.Date(c("2024-06-01","2024-09-01","2025-01-01")), times = 4),
+    sprint_40yd   = c(4.65,4.55,4.50, 4.90,4.80,4.75, 5.20,5.10,5.00, 4.70,4.60,4.55),
+    vertical_jump = c(31,  32,  34,   26,  28,  29,   21,  23,  24,   22,  24,  25),
+    agility_t     = c(8.9, 8.7, 8.5,  9.5, 9.3, 9.2, 10.5,10.2,10.0,  9.0, 8.8, 8.7),
+    beep_level    = c(19,  20,  21,   16,  17,  18,   13,  14,  15,   14,  15,  16),
+    stringsAsFactors = FALSE
+  ),
+  # Remaining 10 — single session
+  data.frame(
+    username = c(
+      "pct_60_player","pct_80_player","pct_90_player",
+      "null_all","null_partial","zero_scores",
+      "speed_only","power_only","almost_d1","overachiever"
+    ),
+    athlete_pk    = 5:14,
+    test_date     = rep(as.Date("2025-01-01"), 10),
+    sprint_40yd   = c(8.33, 6.25, 5.56, NA,   4.90, 4.80, 4.40, 6.10, 5.10, 4.20),
+    vertical_jump = c(10.8, 14.4, 16.2, NA,   NA,   0,    12.0, 38.0, 17.5, 40.0),
+    agility_t     = c(15.0, 11.25,10.0, NA,   9.5,  9.8,  11.5, 11.0, 9.15, 7.8),
+    beep_level    = c(7.8,  10.4, 11.7, NA,   NA,   0,    8.0,  9.0,  12.5, 25.0),
+    stringsAsFactors = FALSE
+  )
 )
 
 if (!is.null(ATHLETE_PATH) && file.exists(ATHLETE_PATH)) {
@@ -234,10 +336,30 @@ build_comparison <- function(ath_row, div_name) {
   d
 }
 
-# Plotly theme constants — site palette
-BG   <- "rgba(0,0,0,0)"
+# Three-tier performance colour — used consistently across all charts
+# >= 100% : green  (#07bc0c) — meets or exceeds the standard
+#  60–99% : yellow (#f1c40f) — close but not there yet
+#  <= 59% : red    (#e74d3c) — needs significant work
+perf_color <- function(pct, alpha = 1) {
+  sapply(pct, function(p) {
+    if (is.na(p))   return(sprintf("rgba(200,200,200,%.2f)", alpha))
+    if (p >= 100)   return(sprintf("rgba(7,188,12,%.2f)",    alpha))
+    if (p >= 60)    return(sprintf("rgba(241,196,15,%.2f)",  alpha))
+    return(sprintf("rgba(231,76,60,%.2f)",   alpha))
+  })
+}
+
+perf_color_solid <- function(pct) {
+  sapply(pct, function(p) {
+    if (is.na(p)) return("#c8c8c8")
+    if (p >= 100) return("#07bc0c")
+    if (p >= 60)  return("#f1c40f")
+    return("#e74d3c")
+  })
+}
 GRID <- "rgba(18,18,18,0.07)"
 TXT  <- "#121212"
+BG   <- "rgba(0,0,0,0)"   # transparent — lets the page background show through
 
 # ── 6. UI ─────────────────────────────────────────────────────────────────────
 ui <- fluidPage(
@@ -294,6 +416,7 @@ ui <- fluidPage(
     .stat-cutoff { font-size:11px; color:#757575; }
     .stat-status { font-size:12px; font-weight:600; margin-top:2px; }
     .stat-status.met    { color:#07bc0c; }
+    .stat-status.warn   { color:#f1c40f; }
     .stat-status.missed { color:#e74d3c; }
     .stat-bar  { height:3px; background:#e0e0e0; border-radius:2px; }
     .stat-fill { height:3px; border-radius:2px; }
@@ -381,7 +504,7 @@ ui <- fluidPage(
                    fluidRow(
                      column(7,
                             p(class = "plot-title", "Skill Profile"),
-                            plotlyOutput("spider_chart", height = "360px", width = "100%")
+                            plotlyOutput("spider_chart", height = "460px", width = "100%")
                      ),
                      column(5,
                             p(class = "plot-title", "Score Summary"),
@@ -450,12 +573,33 @@ ui <- fluidPage(
   ),
   
   tags$script(HTML("
+    function relayoutAllPlots() {
+      document.querySelectorAll('.js-plotly-plot').forEach(function(p) {
+        Plotly.relayout(p, {autosize: true});
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+
+      // Collapse sections 2-4 on load
       setTimeout(function() {
         ['close','progress','schools'].forEach(function(id) {
           document.getElementById('body_' + id).style.display = 'none';
         });
       }, 150);
+
+      // Relayout all plots a moment after any select changes (athlete or division)
+      // This prevents the grey/stale chart when switching athletes with sections open
+      ['athlete_sel', 'div_global'].forEach(function(selId) {
+        var el = document.getElementById(selId);
+        if (el) {
+          el.addEventListener('change', function() {
+            setTimeout(relayoutAllPlots, 300);
+          });
+        }
+      });
+
+      // Section toggle
       ['overview','close','progress','schools'].forEach(function(id) {
         document.getElementById('hdr_' + id).addEventListener('click', function() {
           var body  = document.getElementById('body_' + id);
@@ -507,11 +651,14 @@ server <- function(input, output, session) {
       pct_v  <- if (!is.na(r$pct)) min(r$pct, 100) / 100 else 0
       met    <- isTRUE(r$met)
       fill_c <- if (score_missing) "#e0e0e0"
-      else if (met) "#07bc0c" else "#e74d3c"
+      else perf_color_solid(r$pct)
       status <- if (score_missing)  "Not yet recorded"
       else if (met)       "Meets standard"
       else paste0(round(abs(r$gap), 2), " ", r$unit, " to go")
-      scls   <- if (!score_missing && met) "stat-status met" else "stat-status missed"
+      scls   <- if (score_missing)       "stat-status missed"
+      else if (met)            "stat-status met"
+      else if (!is.na(r$pct) && r$pct >= 60) "stat-status warn"
+      else                     "stat-status missed"
       # Display the score — 0 shows as 0, NA shows as "—"
       score_display <- if (score_missing) "—" else as.character(r$score)
       div(class = "stat-row",
@@ -541,62 +688,82 @@ server <- function(input, output, session) {
       filter(!is.na(cutoff), !is.na(score)) %>%
       mutate(pct = ifelse(is.na(pct), 0, pct))
     req(nrow(c2) > 0)
+    
     cats  <- c(c2$short_label, c2$short_label[1])
+    # Cap at 100 so the shape never exceeds the outer ring
     ath_r <- pmin(c(c2$pct, c2$pct[1]), 100)
     n     <- length(cats)
     
+    # Colour the athlete shape by the worst-performing metric
+    min_pct   <- min(c2$pct, na.rm = TRUE)
+    fill_col  <- if (min_pct >= 100) "rgba(7,188,12,0.20)"
+    else if (min_pct >= 60) "rgba(241,196,15,0.18)"
+    else "rgba(231,76,60,0.18)"
+    line_col  <- if (min_pct >= 100) "#07bc0c"
+    else if (min_pct >= 60) "#f1c40f"
+    else "#e74d3c"
+    
+    # Hover shows per-metric pct in the right colour
+    hover_col <- sapply(c(c2$pct, c2$pct[1]), function(p) {
+      if (is.na(p) || p < 60)  "#e74d3c"
+      else if (p < 100)        "#f1c40f"
+      else                     "#07bc0c"
+    })
+    hover_txt <- paste0(
+      "<b>", cats, "</b><br>",
+      round(ath_r, 1), "% of standard"
+    )
+    
     plot_ly(type = "scatterpolar", mode = "lines", fill = "toself") %>%
-      add_trace(r = rep(100,n), theta = cats, mode = "lines",
-                fillcolor = "rgba(7,188,12,0.10)",
-                line = list(color = "rgba(7,188,12,0.4)", width = 1),
-                showlegend = FALSE, hoverinfo = "none") %>%
-      add_trace(r = rep(75,n), theta = cats, mode = "lines",
-                fillcolor = "rgba(241,196,15,0.12)",
-                line = list(color = "rgba(241,196,15,0.4)", width = 1),
-                showlegend = FALSE, hoverinfo = "none") %>%
-      add_trace(r = rep(50,n), theta = cats, mode = "lines",
-                fillcolor = "rgba(231,76,60,0.10)",
-                line = list(color = "rgba(231,76,60,0.4)", width = 1),
-                showlegend = FALSE, hoverinfo = "none") %>%
-      add_trace(r = rep(25,n), theta = cats, mode = "lines",
-                fillcolor = "rgba(231,76,60,0.16)",
-                line = list(color = "rgba(231,76,60,0.4)", width = 1),
-                showlegend = FALSE, hoverinfo = "none") %>%
-      add_trace(r = ath_r, theta = cats, mode = "lines",
-                fillcolor = "rgba(52,152,219,0.15)",
-                line = list(color = "#3498db", width = 2.5),
-                text = paste0(c2$short_label, "<br>",
-                              round(c(c2$pct, c2$pct[1]), 1), "%"),
-                hoverinfo = "text", showlegend = FALSE) %>%
+      
+      # Single athlete silhouette — one diamond, no nested rings
+      add_trace(
+        r         = ath_r,
+        theta     = cats,
+        mode      = "lines",
+        fillcolor = fill_col,
+        line      = list(color = line_col, width = 3),
+        text      = hover_txt,
+        hoverinfo = "text",
+        showlegend = FALSE
+      ) %>%
+      
       layout(
         polar = list(
           bgcolor = "#fff",
           radialaxis = list(
-            visible = TRUE, range = c(0,100),
-            tickvals = c(25,50,75,100),
-            ticktext = c("25%","50%","75%","Standard"),
-            tickfont = list(size=9, color="#757575"),
-            gridcolor = GRID, linecolor = GRID, tickangle = 0
+            visible   = TRUE,
+            range     = c(0, 100),
+            # Just 4 clean reference rings, no labels cluttering the chart
+            tickvals  = c(25, 50, 75, 100),
+            ticktext  = c("25%", "50%", "75%", "100%"),
+            tickfont  = list(size = 9, color = "#bbb"),
+            tickangle = 0,
+            gridcolor = "rgba(0,0,0,0.10)",
+            linecolor = "rgba(0,0,0,0.10)",
+            showline  = FALSE
           ),
           angularaxis = list(
-            tickfont  = list(size=12, color="#121212"),
-            linecolor = GRID, gridcolor = GRID
+            tickfont  = list(size = 14, color = "#121212"),
+            linecolor = "rgba(0,0,0,0.08)",
+            gridcolor = "rgba(0,0,0,0.08)",
+            rotation  = 90,
+            direction = "clockwise"
           )
         ),
-        showlegend = FALSE,
-        margin     = list(t=60, b=60, l=80, r=80),
-        paper_bgcolor = BG, plot_bgcolor = BG
+        showlegend    = FALSE,
+        margin        = list(t = 80, b = 80, l = 100, r = 100),
+        paper_bgcolor = BG,
+        plot_bgcolor  = BG
       ) %>%
       config(displayModeBar = FALSE, responsive = TRUE)
   })
   
   output$bar_chart <- renderPlotly({
-    # Only filter out rows with no cutoff or truly missing score (NA)
-    # A score of 0 is valid and must be plotted
     c2  <- build_comparison(ath(), sel_div()) %>% filter(!is.na(cutoff), !is.na(score))
     req(nrow(c2) > 0)
-    clr <- ifelse(c2$met, "rgba(7,188,12,0.75)", "rgba(231,76,60,0.75)")
-    bdr <- ifelse(c2$met, "#07bc0c", "#e74d3c")
+    clr <- perf_color(c2$pct, alpha = 0.80)
+    bdr <- perf_color_solid(c2$pct)
     plot_ly() %>%
       add_trace(x = c2$cutoff, y = c2$short_label, type="bar", orientation="h",
                 name = "Standard",
@@ -606,35 +773,42 @@ server <- function(input, output, session) {
                 name = "Your Score",
                 marker = list(color=clr, line=list(color=bdr,width=1.5))) %>%
       layout(barmode="overlay",
-             xaxis=list(title="Score",zeroline=FALSE,color=TXT,gridcolor=GRID),
+             xaxis=list(title="",zeroline=FALSE,color=TXT,gridcolor=GRID),
              yaxis=list(title="",tickfont=list(size=12,color=TXT),gridcolor=GRID),
-             legend=list(orientation="h",y=-0.25,font=list(color=TXT)),
-             margin=list(l=10,r=10,t=10,b=55),
+             legend=list(orientation="h", x=0, y=-0.18, font=list(color=TXT)),
+             margin=list(l=10,r=10,t=10,b=70),
              paper_bgcolor=BG, plot_bgcolor=BG) %>%
       config(displayModeBar=FALSE, responsive=TRUE)
   })
   
   output$lollipop_chart <- renderPlotly({
-    # Keep rows where pct is computable — zero scores on higher-is-better tests
-    # will have pct = 0% and must still display
     c2 <- build_comparison(ath(), sel_div()) %>%
       filter(!is.na(cutoff), !is.na(score)) %>%
-      mutate(pct = ifelse(is.na(pct), 0, pct)) %>%
-      arrange(pct)
+      mutate(pct = ifelse(is.na(pct), 0, pct))
     req(nrow(c2) > 0)
-    bar_col <- ifelse(c2$met, "#07bc0c", "#e74d3c")
-    x_max   <- max(ceiling(max(c2$pct, na.rm=TRUE) * 1.15 / 10) * 10, 115)
+    
+    # Sort to match test_map order: first metric at top, last at bottom
+    # plotly horizontal bars render bottom-up so we reverse test_map order
+    ordered_labels <- rev(test_map$short_label)
+    c2 <- c2 %>%
+      mutate(short_label = factor(short_label, levels = ordered_labels)) %>%
+      arrange(short_label)
+    
+    bar_col   <- perf_color_solid(c2$pct)
+    bar_col_a <- perf_color(c2$pct, alpha = 0.85)
+    x_max     <- max(ceiling(max(c2$pct, na.rm = TRUE) * 1.15 / 10) * 10, 115)
     hover_txt <- paste0(c2$short_label,"<br>",
                         round(c2$pct,1),"% of standard<br>",
                         "Your score: ",c2$score," ",c2$unit,
                         "<br>Cutoff: ",c2$cutoff," ",c2$unit)
     plot_ly() %>%
       add_segments(x=0, xend=c2$pct, y=c2$short_label, yend=c2$short_label,
-                   line=list(color=bar_col,width=3),
+                   line=list(color=bar_col_a, width=4),
                    showlegend=FALSE, hoverinfo="none") %>%
       add_trace(type="scatter", mode="markers",
                 x=c2$pct, y=c2$short_label,
-                marker=list(size=14,color=bar_col,line=list(color="#fff",width=2)),
+                marker=list(size=16, color=bar_col,
+                            line=list(color="#fff", width=2.5)),
                 text=hover_txt, hoverinfo="text", showlegend=FALSE) %>%
       add_segments(x=100, xend=100, y=0.5, yend=nrow(c2)+0.5,
                    line=list(color="rgba(18,18,18,0.2)",width=1.5,dash="dot"),
@@ -644,13 +818,25 @@ server <- function(input, output, session) {
                       showarrow=FALSE,
                       font=list(size=12,color=TXT), xanchor="left") %>%
       layout(
-        xaxis=list(title="% of Standard",range=c(0,x_max),
-                   zeroline=FALSE,showgrid=TRUE,gridcolor=GRID,ticksuffix="%",color=TXT),
-        yaxis=list(title="",tickfont=list(size=12,color=TXT),showgrid=FALSE),
-        annotations=list(list(x=100,y=nrow(c2)+0.7,text="Standard",
-                              showarrow=FALSE,font=list(size=10,color="#757575"),
-                              xanchor="center")),
-        margin=list(l=10,r=20,t=20,b=50),
+        xaxis = list(title="", range=c(0,x_max),
+                     zeroline=FALSE, showgrid=TRUE, gridcolor=GRID,
+                     ticksuffix="%", color=TXT),
+        yaxis = list(
+          title    = "",
+          # Pin exactly to the metric labels — eliminates 0.5/4.5 numeric ticks
+          tickvals = as.character(c2$short_label),
+          ticktext = as.character(c2$short_label),
+          tickfont = list(size=12, color=TXT),
+          showgrid = FALSE,
+          type     = "category"
+        ),
+        annotations = list(list(
+          x=100, y=nrow(c2)+0.5, text="Standard",
+          showarrow=FALSE, font=list(size=10, color="#757575"),
+          xanchor="center"
+        )),
+        # Match bar chart margins exactly so the two charts sit level
+        margin = list(l=10, r=20, t=10, b=70),
         paper_bgcolor=BG, plot_bgcolor=BG) %>%
       config(displayModeBar=FALSE, responsive=TRUE)
   })
@@ -711,8 +897,14 @@ server <- function(input, output, session) {
             x=test_map$short_label,
             y=paste0(schools$school," (",schools$division,")"),
             type="heatmap", text=hover, hoverinfo="text",
-            colorscale=list(list(0,"#fdecea"),list(0.69,"#fef9e7"),
-                            list(0.77,"#eafaf1"),list(1,"#07bc0c")),
+            colorscale=list(
+              list(0,    "#e74d3c"),   # 0%   — red
+              list(0.46, "#e74d3c"),   # 59%  — red boundary
+              list(0.46, "#f1c40f"),   # 60%  — yellow starts
+              list(0.77, "#f1c40f"),   # 99%  — yellow boundary
+              list(0.77, "#07bc0c"),   # 100% — green starts
+              list(1,    "#07bc0c")    # 130% — green
+            ),
             zmin=0, zmax=130, showscale=TRUE,
             colorbar=list(title="% of Standard",
                           tickvals=c(0,90,100,115,130),
