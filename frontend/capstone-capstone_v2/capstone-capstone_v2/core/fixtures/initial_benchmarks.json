@@ -1,0 +1,722 @@
+[
+{
+  "model": "core.divisionbenchmark",
+  "pk": 61,
+  "fields": {
+    "division": "Division 1",
+    "category": "Speed and Acceleration",
+    "test_name": "40-Yard Dash",
+    "raw_value": "Sub 5.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 5.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 62,
+  "fields": {
+    "division": "Division 2",
+    "category": "Speed and Acceleration",
+    "test_name": "40-Yard Dash",
+    "raw_value": "Sub 5.2 seconds",
+    "threshold_min": 5.0,
+    "threshold_max": 5.2
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 63,
+  "fields": {
+    "division": "Division 3",
+    "category": "Speed and Acceleration",
+    "test_name": "40-Yard Dash",
+    "raw_value": "Sub 5.4 seconds",
+    "threshold_min": 5.2,
+    "threshold_max": 5.4
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 64,
+  "fields": {
+    "division": "Division 1",
+    "category": "Speed and Acceleration",
+    "test_name": "30-Meter Sprint",
+    "raw_value": "Sub 4.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 4.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 65,
+  "fields": {
+    "division": "Division 2",
+    "category": "Speed and Acceleration",
+    "test_name": "30-Meter Sprint",
+    "raw_value": "Sub 4.2 seconds",
+    "threshold_min": 4.0,
+    "threshold_max": 4.2
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 66,
+  "fields": {
+    "division": "Division 3",
+    "category": "Speed and Acceleration",
+    "test_name": "30-Meter Sprint",
+    "raw_value": "Sub 4.4 seconds",
+    "threshold_min": 4.2,
+    "threshold_max": 4.4
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 67,
+  "fields": {
+    "division": "Division 1",
+    "category": "Speed and Acceleration",
+    "test_name": "Flying Sprints",
+    "raw_value": "Sub 3.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 3.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 68,
+  "fields": {
+    "division": "Division 2",
+    "category": "Speed and Acceleration",
+    "test_name": "Flying Sprints",
+    "raw_value": "Sub 3.1 seconds",
+    "threshold_min": 3.0,
+    "threshold_max": 3.1
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 69,
+  "fields": {
+    "division": "Division 3",
+    "category": "Speed and Acceleration",
+    "test_name": "Flying Sprints",
+    "raw_value": "Sub 3.2 seconds",
+    "threshold_min": 3.1,
+    "threshold_max": 3.2
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 70,
+  "fields": {
+    "division": "Division 1",
+    "category": "Speed and Acceleration",
+    "test_name": "10-meter acceleration test",
+    "raw_value": "Sub 1.8 seconds",
+    "threshold_min": null,
+    "threshold_max": 1.8
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 71,
+  "fields": {
+    "division": "Division 2",
+    "category": "Speed and Acceleration",
+    "test_name": "10-meter acceleration test",
+    "raw_value": "Sub 1.9 seconds",
+    "threshold_min": 1.8,
+    "threshold_max": 1.9
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 72,
+  "fields": {
+    "division": "Division 3",
+    "category": "Speed and Acceleration",
+    "test_name": "10-meter acceleration test",
+    "raw_value": "Sub 2.0 seconds",
+    "threshold_min": 1.9,
+    "threshold_max": 2.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 73,
+  "fields": {
+    "division": "Division 1",
+    "category": "Speed and Acceleration",
+    "test_name": "5/10/20-Meter Sprint",
+    "raw_value": "Sub 1.0 seconds (5m), Sub 1.8 seconds (10m), Sub 3.6 seconds (20m)",
+    "threshold_min": null,
+    "threshold_max": 1.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 74,
+  "fields": {
+    "division": "Division 2",
+    "category": "Speed and Acceleration",
+    "test_name": "5/10/20-Meter Sprint",
+    "raw_value": "Sub 1.1 seconds (5m), Sub 1.9 seconds (10m), Sub 3.7 seconds (20m)",
+    "threshold_min": 1.0,
+    "threshold_max": 1.1
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 75,
+  "fields": {
+    "division": "Division 3",
+    "category": "Speed and Acceleration",
+    "test_name": "5/10/20-Meter Sprint",
+    "raw_value": "Sub 1.2 seconds (5m), Sub 2.0 seconds (10m), Sub 3.8 seconds (20m)",
+    "threshold_min": 1.1,
+    "threshold_max": 1.2
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 76,
+  "fields": {
+    "division": "Division 1",
+    "category": "Explosiveness and Power",
+    "test_name": "Vertical Jump",
+    "raw_value": "18-20+ inches",
+    "threshold_min": 18.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 77,
+  "fields": {
+    "division": "Division 2",
+    "category": "Explosiveness and Power",
+    "test_name": "Vertical Jump",
+    "raw_value": "16-18 inches",
+    "threshold_min": 16.0,
+    "threshold_max": 18.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 78,
+  "fields": {
+    "division": "Division 3",
+    "category": "Explosiveness and Power",
+    "test_name": "Vertical Jump",
+    "raw_value": "14-16 inches",
+    "threshold_min": 14.0,
+    "threshold_max": 16.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 79,
+  "fields": {
+    "division": "Division 1",
+    "category": "Explosiveness and Power",
+    "test_name": "Standing Broad Jump",
+    "raw_value": "7-8+ feet",
+    "threshold_min": 7.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 80,
+  "fields": {
+    "division": "Division 2",
+    "category": "Explosiveness and Power",
+    "test_name": "Standing Broad Jump",
+    "raw_value": "6.5-7 feet",
+    "threshold_min": 6.5,
+    "threshold_max": 7.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 81,
+  "fields": {
+    "division": "Division 3",
+    "category": "Explosiveness and Power",
+    "test_name": "Standing Broad Jump",
+    "raw_value": "6-6.5 feet",
+    "threshold_min": 6.0,
+    "threshold_max": 6.5
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 82,
+  "fields": {
+    "division": "Division 1",
+    "category": "Explosiveness and Power",
+    "test_name": "Medicine Ball Throws",
+    "raw_value": "18-20+ feet",
+    "threshold_min": 18.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 83,
+  "fields": {
+    "division": "Division 2",
+    "category": "Explosiveness and Power",
+    "test_name": "Medicine Ball Throws",
+    "raw_value": "16-18 feet",
+    "threshold_min": 16.0,
+    "threshold_max": 18.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 84,
+  "fields": {
+    "division": "Division 3",
+    "category": "Explosiveness and Power",
+    "test_name": "Medicine Ball Throws",
+    "raw_value": "14-16 feet",
+    "threshold_min": 14.0,
+    "threshold_max": 16.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 85,
+  "fields": {
+    "division": "Division 1",
+    "category": "Agility and Quickness",
+    "test_name": "Shuttle Run",
+    "raw_value": "Sub 10.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 10.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 86,
+  "fields": {
+    "division": "Division 2",
+    "category": "Agility and Quickness",
+    "test_name": "Shuttle Run",
+    "raw_value": "Sub 10.5 seconds",
+    "threshold_min": 10.0,
+    "threshold_max": 10.5
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 87,
+  "fields": {
+    "division": "Division 3",
+    "category": "Agility and Quickness",
+    "test_name": "Shuttle Run",
+    "raw_value": "Sub 11.0 seconds",
+    "threshold_min": 10.5,
+    "threshold_max": 11.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 88,
+  "fields": {
+    "division": "Division 1",
+    "category": "Agility and Quickness",
+    "test_name": "Lateral Agility Test",
+    "raw_value": "Sub 12.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 12.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 89,
+  "fields": {
+    "division": "Division 2",
+    "category": "Agility and Quickness",
+    "test_name": "Lateral Agility Test",
+    "raw_value": "Sub 13.0 seconds",
+    "threshold_min": 12.0,
+    "threshold_max": 13.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 90,
+  "fields": {
+    "division": "Division 3",
+    "category": "Agility and Quickness",
+    "test_name": "Lateral Agility Test",
+    "raw_value": "Sub 14.0 seconds",
+    "threshold_min": 13.0,
+    "threshold_max": 14.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 91,
+  "fields": {
+    "division": "Division 1",
+    "category": "Agility and Quickness",
+    "test_name": "T-Test",
+    "raw_value": "Sub 8.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 8.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 92,
+  "fields": {
+    "division": "Division 2",
+    "category": "Agility and Quickness",
+    "test_name": "T-Test",
+    "raw_value": "Sub 8.5 seconds",
+    "threshold_min": 8.0,
+    "threshold_max": 8.5
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 93,
+  "fields": {
+    "division": "Division 3",
+    "category": "Agility and Quickness",
+    "test_name": "T-Test",
+    "raw_value": "Sub 9.0 seconds",
+    "threshold_min": 8.5,
+    "threshold_max": 9.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 94,
+  "fields": {
+    "division": "Division 1",
+    "category": "Agility and Quickness",
+    "test_name": "Illinois Agility Test",
+    "raw_value": "Sub 16.0 seconds",
+    "threshold_min": null,
+    "threshold_max": 16.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 95,
+  "fields": {
+    "division": "Division 2",
+    "category": "Agility and Quickness",
+    "test_name": "Illinois Agility Test",
+    "raw_value": "Sub 17.0 seconds",
+    "threshold_min": 16.0,
+    "threshold_max": 17.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 96,
+  "fields": {
+    "division": "Division 3",
+    "category": "Agility and Quickness",
+    "test_name": "Illinois Agility Test",
+    "raw_value": "Sub 18.0 seconds",
+    "threshold_min": 17.0,
+    "threshold_max": 18.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 97,
+  "fields": {
+    "division": "Division 1",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Yo-Yo Intermittent Recovery Test (Beep Test)",
+    "raw_value": "Level 13+",
+    "threshold_min": 13.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 98,
+  "fields": {
+    "division": "Division 2",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Yo-Yo Intermittent Recovery Test (Beep Test)",
+    "raw_value": "Level 11-12",
+    "threshold_min": 11.0,
+    "threshold_max": 12.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 99,
+  "fields": {
+    "division": "Division 3",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Yo-Yo Intermittent Recovery Test (Beep Test)",
+    "raw_value": "Level 9-10+",
+    "threshold_min": 9.0,
+    "threshold_max": 10.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 100,
+  "fields": {
+    "division": "Division 1",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Cooper Test",
+    "raw_value": "8202+ meters or 2500+ meters",
+    "threshold_min": 2500.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 101,
+  "fields": {
+    "division": "Division 2",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Cooper Test",
+    "raw_value": "7218-8202 meters or 2200-2500 meters",
+    "threshold_min": 2200.0,
+    "threshold_max": 2500.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 102,
+  "fields": {
+    "division": "Division 3",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Cooper Test",
+    "raw_value": "6562-7218 meters or 2000-2200 meters",
+    "threshold_min": 2000.1,
+    "threshold_max": 2200.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 103,
+  "fields": {
+    "division": "Division 1",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Interval Runs",
+    "raw_value": "Distance covered 3937 feet or 1200+ meters",
+    "threshold_min": 1200.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 104,
+  "fields": {
+    "division": "Division 2",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Interval Runs",
+    "raw_value": "Distance covered 1000-1200 meters",
+    "threshold_min": 1000.0,
+    "threshold_max": 1200.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 105,
+  "fields": {
+    "division": "Division 3",
+    "category": "Endurance and Aerobic Capacity",
+    "test_name": "Interval Runs",
+    "raw_value": "Distance covered 800-1000 meters",
+    "threshold_min": 800.0,
+    "threshold_max": 1000.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 106,
+  "fields": {
+    "division": "Division 1",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Push-ups",
+    "raw_value": "25-30 push-ups",
+    "threshold_min": 25.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 107,
+  "fields": {
+    "division": "Division 2",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Push-ups",
+    "raw_value": "20-25 push-ups",
+    "threshold_min": 20.0,
+    "threshold_max": 25.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 108,
+  "fields": {
+    "division": "Division 3",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Push-ups",
+    "raw_value": "15-20 push-ups",
+    "threshold_min": 15.0,
+    "threshold_max": 20.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 109,
+  "fields": {
+    "division": "Division 1",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Sit-ups",
+    "raw_value": "35-40 sit-ups in one minute,",
+    "threshold_min": 35.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 110,
+  "fields": {
+    "division": "Division 2",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Sit-ups",
+    "raw_value": "30-35 sit-ups in one minute",
+    "threshold_min": 30.0,
+    "threshold_max": 35.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 111,
+  "fields": {
+    "division": "Division 3",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Sit-ups",
+    "raw_value": "25-30 sit-ups in one minute",
+    "threshold_min": 25.0,
+    "threshold_max": 30.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 112,
+  "fields": {
+    "division": "Division 1",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Planks",
+    "raw_value": "2-3 minutes",
+    "threshold_min": 2.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 113,
+  "fields": {
+    "division": "Division 2",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Planks",
+    "raw_value": "1.5-2.5 minutes",
+    "threshold_min": 1.5,
+    "threshold_max": 2.5
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 114,
+  "fields": {
+    "division": "Division 3",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Planks",
+    "raw_value": "1-2 minutes.",
+    "threshold_min": 1.0,
+    "threshold_max": 2.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 115,
+  "fields": {
+    "division": "Division 1",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Lunges",
+    "raw_value": "20-25 lunges per leg in one minute",
+    "threshold_min": 20.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 116,
+  "fields": {
+    "division": "Division 2",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Lunges",
+    "raw_value": "15-20 lunges per leg in one minute",
+    "threshold_min": 15.0,
+    "threshold_max": 20.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 117,
+  "fields": {
+    "division": "Division 3",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Lunges",
+    "raw_value": "10-15 lunges per leg in one minute",
+    "threshold_min": 10.0,
+    "threshold_max": 15.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 118,
+  "fields": {
+    "division": "Division 1",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Box Jumps",
+    "raw_value": "Box heights from 24 to 30 inches",
+    "threshold_min": 24.0,
+    "threshold_max": null
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 119,
+  "fields": {
+    "division": "Division 2",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Box Jumps",
+    "raw_value": "Box heights from 20 to 24 inches",
+    "threshold_min": 20.0,
+    "threshold_max": 24.0
+  }
+},
+{
+  "model": "core.divisionbenchmark",
+  "pk": 120,
+  "fields": {
+    "division": "Division 3",
+    "category": "Physical Strength and Endurance Circuit",
+    "test_name": "Box Jumps",
+    "raw_value": "Box heights from 16 to 20 inches",
+    "threshold_min": 16.0,
+    "threshold_max": 20.0
+  }
+}
+]

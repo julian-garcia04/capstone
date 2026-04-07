@@ -1,0 +1,29 @@
+# Root-level ignores (monorepo)
+
+# Frontend (Vite/React)
+Frontend/node_modules/
+Frontend/dist/
+Frontend/dist-ssr/
+Frontend/.env
+Frontend/.env.*
+
+# Backend (Python/Django — common)
+Backend/**/__pycache__/
+Backend/**/*.py[cod]
+Backend/**/.venv/
+Backend/**/venv/
+Backend/**/env/
+Backend/**/.pytest_cache/
+Backend/**/*.sqlite3
+Backend/**/db.sqlite3
+Backend/**/.env
+Backend/**/.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# Large local archives (optional — keep zip out if huge)
+# Project Information/**/*.zip

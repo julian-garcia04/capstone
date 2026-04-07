@@ -8,12 +8,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# You can copy the secret key from your old settings.py if you want, or use this new one.
 SECRET_KEY = 'django-insecure-your-new-secret-key-here'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Local dev: allow all hosts so Vite (:: / [::1] / LAN IPs) and the proxy never hit DisallowedHost.
+# Tighten ALLOWED_HOSTS before any real deployment.
+ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -127,24 +130,25 @@ REST_FRAMEWORK = {
 }
 
 
-# ── CORS Settings for React and Shiny ───────────────────────────────────
+# ── CORS Settings for React and R Shiny (aligned with team capstone_v2 repo) ──
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",    # The default React dev server
-    "http://127.0.0.1:3000",    # For React
-    "http://localhost:5173",    # Default for Vite
-    "http://127.0.0.1:5173",    # For Vite
-    "http://localhost:3838",    # The default R Shiny dev server
-    "http://127.0.0.1:3838",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://localhost:3838",  # default R Shiny dev server
+    "http://127.0.0.1:3838",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True # For development only / change after we initially connect frontend to backend
+CORS_ALLOW_ALL_ORIGINS = True  # Dev only; tighten for production
 CORS_ALLOW_CREDENTIALS = True
 
+# Browser clients on Vite (8080) and Shiny (3838) send CSRF + session cookies when calling the API.
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3838",
+    "http://127.0.0.1:3838",
 ]

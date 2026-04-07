@@ -1,9 +1,9 @@
-from django.contrib import admin # <-- 1. Uncomment this
+#from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    # We are not using the admin panel (except DRF secretly needs it!)
-    path('admin/', admin.site.urls),
+    # We are not using the admin panel
+    # path('admin/', admin.site.urls), 
 
     # Include all the URLs from our 'core' app, prefixed with 'api/'
     path('api/', include('core.urls')),
