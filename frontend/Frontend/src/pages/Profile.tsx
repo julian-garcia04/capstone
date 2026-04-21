@@ -142,6 +142,13 @@ export default function Profile() {
     }
   }, []);
 
+  // Auto-load the fit report if the user has tests!
+  useEffect(() => {
+    if (testsSorted.length > 0 && !fitReport && !fitLoading) {
+      void loadFitReport();
+    }
+  }, [testsSorted, fitReport, fitLoading, loadFitReport]);
+
   if (isBootstrapping) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -186,6 +193,9 @@ const latestTest = testsSorted.length > 0 ? testsSorted[0] : {};
   const queryParams = new URLSearchParams();
 
   if (user) queryParams.append("user", user.username);
+  if (user?.grad_year) queryParams.append("grad_year", user.grad_year.toString());
+  if (user?.height_in) queryParams.append("height_in", user.height_in.toString());
+  if (user?.weight_lb) queryParams.append("weight_lb", user.weight_lb.toString());
 
   ALL_TEST_KEYS.forEach(key => {
     if (latestTest[key] !== null && latestTest[key] !== undefined && latestTest[key] !== "") {
@@ -263,235 +273,244 @@ queryParams.append("refresh", Date.now().toString());
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      <main className="container mx-auto px-6 pb-20 space-y-10 -mt-4">
-        <Card className="border-border shadow-card">
-          <CardHeader>
-            <CardTitle className="text-xl">Athlete details</CardTitle>
-            <CardDescription>Grad year and body metrics used with your benchmark reports.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSaveProfile} className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl">
-              <div className="space-y-2">
-                <Label htmlFor="grad-year">Grad year</Label>
-                <Input
-                  id="grad-year"
-                  inputMode="numeric"
-                  value={gradYear}
-                  onChange={(e) => setGradYear(e.target.value)}
-                  placeholder="2027"
-                  className="bg-background"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="height-in">Height (in)</Label>
-                <Input
-                  id="height-in"
-                  inputMode="decimal"
-                  value={heightIn}
-                  onChange={(e) => setHeightIn(e.target.value)}
-                  placeholder="70"
-                  className="bg-background"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="weight-lb">Weight (lb)</Label>
-                <Input
-                  id="weight-lb"
-                  inputMode="decimal"
-                  value={weightLb}
-                  onChange={(e) => setWeightLb(e.target.value)}
-                  placeholder="165"
-                  className="bg-background"
-                />
-              </div>
-              <div className="sm:col-span-3">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-emerald hover:bg-emerald-light text-primary-foreground"
-                >
-                  {isSubmitting ? "Saving…" : "Save profile"}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+      <main className="container mx-auto px-6 pb-20 space-y-8 mt-8">
 
-        <Card className="border-border shadow-card">
-          <CardHeader>
-            <CardTitle className="text-xl">Log measurables</CardTitle>
-            <CardDescription>
-              Enter any metrics you have from a session. Leave fields blank if you did not run that test. At least one
-              value is required to save a new entry. Each field shows the unit the API benchmarks expect (e.g. 40-yard
-              dash in seconds, vertical jump in inches).
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogTest} className="space-y-8">
-              {TEST_FIELD_GROUPS.map((group) => (
-                <div key={group.title}>
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-emerald mb-3">{group.title}</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {group.keys.map((key) => (
-                      <div key={key} className="space-y-1.5">
-                        <Label htmlFor={`test-${key}`} className="text-xs text-muted-foreground font-normal leading-snug">
-                          {testFieldLabelWithUnit(key)}
-                        </Label>
-                        <Input
-                          id={`test-${key}`}
-                          inputMode="decimal"
-                          value={testForm[key]}
-                          onChange={(e) => setTestForm((prev) => ({ ...prev, [key]: e.target.value }))}
-                          placeholder="—"
-                          className="bg-background"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              <Button
-                type="submit"
-                disabled={savingTest}
-                className="bg-emerald hover:bg-emerald-light text-primary-foreground"
-              >
-                {savingTest ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving…
-                  </>
-                ) : (
-                  "Save test entry"
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
+        {/* ========================================= */}
+        {/* ROW 1: THE RADAR (Full Width for R Shiny) */}
+        {/* ========================================= */}
         <Card className="border-border shadow-card overflow-hidden">
-                  <CardHeader className="bg-gray-50/50 border-b border-gray-100">
-                    <CardTitle className="text-xl">Visual Performance Radar</CardTitle>
-                    <CardDescription>Compare your specific metrics against division standards.</CardDescription>
-                      </CardHeader>
-                  <iframe
-            key={shinyUrl}
-            src={shinyUrl}
-            style={{ width: '100%', height: '700px', border: 'none' }}
-            title="Starting XI Visual Fit Report"
-          />
-                </Card>
-                {/* -------------------------------- */}
-        <Card className="border-border shadow-card">
-          <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <CardTitle className="text-xl flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-gold" />
-                Division fit
-              </CardTitle>
-              <CardDescription>
-                Uses your most recent test row and NCAA division benchmarks from the API.
-              </CardDescription>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={fitLoading}
-              onClick={() => void loadFitReport()}
-              className="border-gold/40 text-foreground hover:bg-gold/10 shrink-0"
-            >
-              {fitLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Load report
-                </>
-              )}
-            </Button>
+          <CardHeader className="bg-gray-50/50 border-b border-gray-100 pb-4">
+            <CardTitle className="text-xl">Visual Performance Radar</CardTitle>
+            <CardDescription>Explore your full analytics profile below. Compare your specific metrics against division standards.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {fitError && (
-              <p className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md px-3 py-2">
-                {fitError}
-              </p>
-            )}
-            {fitReport && (
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Latest test date: <span className="text-foreground font-medium">{fitReport.test_date}</span>
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {Object.entries(fitReport.division_alignment).map(([div, score]) => (
-                    <div
-                      key={div}
-                      className="rounded-xl border border-border bg-card px-4 py-3 text-center"
-                    >
-                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{div}</div>
-                      <div className="text-2xl font-bold text-foreground mt-1">{score}%</div>
+          <div className="w-full min-h-[850px]">
+            <iframe
+              key={shinyUrl}
+              src={shinyUrl}
+              style={{ width: '100%', height: '100%', minHeight: '850px', border: 'none' }}
+              title="Starting XI Visual Fit Report"
+            />
+          </div>
+        </Card>
+
+        {/* ========================================= */}
+        {/* ROW 2: FIT & DATA ENTRY                   */}
+        {/* ========================================= */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+
+          {/* LEFT SIDE: Division Fit (5 Columns) */}
+          <div className="xl:col-span-5 flex flex-col">
+            <Card className="border-border shadow-card h-full flex flex-col">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <CardTitle className="text-xl flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-gold" />
+                    Division fit
+                  </CardTitle>
+                  <CardDescription>
+                    Uses your most recent test row and NCAA benchmarks.
+                  </CardDescription>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={fitLoading}
+                  onClick={() => void loadFitReport()}
+                  className="border-gold/40 text-foreground hover:bg-gold/10 shrink-0"
+                >
+                  {fitLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Load report
+                    </>
+                  )}
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-4 flex-1">
+                {fitError && (
+                  <p className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md px-3 py-2">
+                    {fitError}
+                  </p>
+                )}
+                {fitReport && (
+                  <div className="space-y-8 mt-2">
+                    <p className="text-sm text-muted-foreground">
+                      Latest test date: <span className="text-foreground font-medium">{fitReport.test_date}</span>
+                    </p>
+
+                    {/* 1. The Hero Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      {Object.entries(fitReport.division_alignment).map(([div, score]) => {
+                        const isRecommended = div === fitReport.recommended_division;
+
+                        return (
+                          <div
+                            key={div}
+                            className={`relative flex flex-col items-center justify-center rounded-2xl border p-4 transition-all duration-300 ${
+                              isRecommended
+                                ? "border-emerald bg-emerald/10 shadow-lg scale-105 z-10"
+                                : "border-border bg-card/40 opacity-50"
+                            }`}
+                          >
+                            {isRecommended && (
+                              <div className="absolute -top-3 bg-emerald text-primary-foreground text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-md">
+                                ★ Best Fit
+                              </div>
+                            )}
+                            <div className={`text-xs font-bold uppercase tracking-wide ${isRecommended ? "text-emerald" : "text-muted-foreground"}`}>
+                              {div}
+                            </div>
+                            <div className={`mt-2 font-black tracking-tight ${isRecommended ? "text-4xl text-foreground" : "text-2xl text-muted-foreground"}`}>
+                              {score}%
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 2. The Strengths & Weaknesses Badges */}
+                    <div className="grid grid-cols-1 gap-6 pt-4 border-t border-border/50">
+                      {fitReport.strengths.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-emerald mb-3">Strengths</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {fitReport.strengths.map((s, i) => {
+                              const drillName = s.split(" is ")[0];
+                              return (
+                                <span key={i} className="px-3 py-1.5 bg-emerald/10 text-emerald-light border border-emerald/20 rounded-full text-xs font-semibold shadow-sm">
+                                  {drillName}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {fitReport.weaknesses.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-destructive mb-3">Areas to develop</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {fitReport.weaknesses.map((w, i) => {
+                              const drillName = w.split(" is ")[0];
+                              return (
+                                <span key={i} className="px-3 py-1.5 bg-destructive/10 text-destructive border border-destructive/20 rounded-full text-xs font-semibold shadow-sm">
+                                  {drillName}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {!fitReport && !fitError && (
+                  <p className="text-sm text-muted-foreground">Load a report after you have saved at least one test entry.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* RIGHT SIDE: Master Data Entry (7 Columns) */}
+          <div className="xl:col-span-7 flex flex-col">
+            <Card className="border-border shadow-card h-full">
+              <CardHeader className="border-b border-border/50 pb-4 mb-4">
+                <CardTitle className="text-xl">Athlete Control Center</CardTitle>
+                <CardDescription>Update your physical profile and log new session measurables.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-8">
+
+                {/* Part 1: Physical Profile */}
+                <form onSubmit={handleSaveProfile} className="space-y-4">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Physical Profile</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="grad-year" className="text-xs">Grad year</Label>
+                      <Input id="grad-year" inputMode="numeric" value={gradYear} onChange={(e) => setGradYear(e.target.value)} placeholder="2027" className="bg-background h-8 text-sm" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="height-in" className="text-xs">Height (in)</Label>
+                      <Input id="height-in" inputMode="decimal" value={heightIn} onChange={(e) => setHeightIn(e.target.value)} placeholder="70" className="bg-background h-8 text-sm" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="weight-lb" className="text-xs">Weight (lb)</Label>
+                      <Input id="weight-lb" inputMode="decimal" value={weightLb} onChange={(e) => setWeightLb(e.target.value)} placeholder="165" className="bg-background h-8 text-sm" />
+                    </div>
+                  </div>
+                  <Button type="submit" disabled={isSubmitting} variant="secondary" className="w-full h-8 text-xs">
+                    {isSubmitting ? "Saving…" : "Save Physical Profile"}
+                  </Button>
+                </form>
+
+                <div className="h-px bg-border/50 w-full" />
+
+                {/* Part 2: Measurables */}
+                <form onSubmit={handleLogTest} className="space-y-6">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Log New Measurables</h3>
+                  {TEST_FIELD_GROUPS.map((group) => (
+                    <div key={group.title}>
+                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-emerald mb-2">{group.title}</h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {group.keys.map((key) => (
+                          <div key={key} className="space-y-1">
+                            <Label htmlFor={`test-${key}`} className="text-[10px] text-muted-foreground font-normal leading-tight">
+                              {testFieldLabelWithUnit(key)}
+                            </Label>
+                            <Input id={`test-${key}`} inputMode="decimal" value={testForm[key]} onChange={(e) => setTestForm((prev) => ({ ...prev, [key]: e.target.value }))} placeholder="—" className="bg-background h-8 text-sm" />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
-                </div>
-                <p className="text-sm">
-                  <span className="text-muted-foreground">Recommended: </span>
-                  <span className="font-semibold text-emerald">{fitReport.recommended_division}</span>
-                </p>
-                {fitReport.strengths.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-2">Strengths</h4>
-                    <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                      {fitReport.strengths.map((s, i) => (
-                        <li key={i}>{s}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {fitReport.weaknesses.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-2">Areas to develop</h4>
-                    <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                      {fitReport.weaknesses.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
-            {!fitReport && !fitError && (
-              <p className="text-sm text-muted-foreground">Load a report after you have saved at least one test entry.</p>
-            )}
-          </CardContent>
-        </Card>
+                  <Button type="submit" disabled={savingTest} className="bg-emerald hover:bg-emerald-light text-primary-foreground w-full">
+                    {savingTest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Save Test Entry"}
+                  </Button>
+                </form>
 
-        <Card className="border-border shadow-card">
-          <CardHeader>
-            <CardTitle className="text-xl">Test history</CardTitle>
-            <CardDescription>Entries are ordered with the newest first.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {testsSorted.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No tests logged yet.</p>
-            ) : (
-              <div className="rounded-md border border-border overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="whitespace-nowrap">Date</TableHead>
-                      <TableHead>Summary</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {testsSorted.map((t) => (
-                      <TableRow key={t.id ?? `${t.test_date}-${summarizeTest(t)}`}>
-                        <TableCell className="font-medium whitespace-nowrap">{t.test_date ?? "—"}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm max-w-xl">{summarizeTest(t)}</TableCell>
+              </CardContent>
+            </Card>
+          </div>
+
+        </div>
+
+        {/* ========================================= */}
+        {/* ROW 3: THE LEDGER (History)               */}
+        {/* ========================================= */}
+        <div>
+          <Card className="border-border shadow-card">
+            <CardHeader>
+              <CardTitle className="text-xl">Test history</CardTitle>
+              <CardDescription>Entries are ordered with the newest first.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {testsSorted.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No tests logged yet.</p>
+              ) : (
+                <div className="rounded-md border border-border overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="whitespace-nowrap">Date</TableHead>
+                        <TableHead>Summary</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    </TableHeader>
+                    <TableBody>
+                      {testsSorted.map((t) => (
+                        <TableRow key={t.id ?? `${t.test_date}-${summarizeTest(t)}`}>
+                          <TableCell className="font-medium whitespace-nowrap">{t.test_date ?? "—"}</TableCell>
+                          <TableCell className="text-muted-foreground text-sm max-w-xl">{summarizeTest(t)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
       </main>
     </div>
   );

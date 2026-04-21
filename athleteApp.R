@@ -15,7 +15,7 @@ library(dplyr)
 library(tidyr)
 
 # ── PATH CONFIGURATION ────────────────────────────────────────────────────────
-BENCHMARK_PATH <- "C:/Users/strea/PycharmProjects/capstone/core/fixtures/initial_benchmarks.json"
+BENCHMARK_PATH <- "./core/fixtures/initial_benchmarks.json"
 ATHLETE_PATH   <- NULL   # set to a file path when you have real athlete JSON
 
 # ── 1. Load & parse benchmarks from JSON ─────────────────────────────────────
@@ -627,17 +627,25 @@ server <- function(input, output, session) {
   # 1. Read the hidden URL parameters coming from React
   live_query <- reactive({ parseQueryString(session$clientData$url_search) })
   
-  # 2. Build the live profile (if URL params exist)
+  # 2. Build the live profile (including Biometrics from React)
   live_profile <- reactive({
     q <- live_query()
     if (is.null(q$user)) return(NULL)
     
+    # "Catch" the biometrics from the URL params
+    gy <- if (!is.null(q$grad_year)) as.integer(q$grad_year) else NA_integer_
+    ht <- if (!is.null(q$height_in)) as.numeric(q$height_in) else NA_real_
+    wt <- if (!is.null(q$weight_lb)) as.numeric(q$weight_lb) else NA_real_
+    
     live_ath <- data.frame(
       username = q$user,
       display_name = paste(q$user, "(Live Data)"),
-      grad_year = NA_integer_, height_in = NA_real_, weight_lb = NA_real_,
+      grad_year = gy,    # Now correctly populated
+      height_in = ht,    # Now correctly populated
+      weight_lb = wt,    # Now correctly populated
       stringsAsFactors = FALSE
     )
+    
     for (fld in test_map$field_name) {
       live_ath[[fld]] <- if (!is.null(q[[fld]])) as.numeric(q[[fld]]) else NA_real_
     }
@@ -988,4 +996,4 @@ server <- function(input, output, session) {
   }, striped=TRUE, hover=TRUE, bordered=TRUE, spacing="s", width="100%")
 }
 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, options = list(port = 6746))
